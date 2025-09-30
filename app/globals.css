@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg border border-gray-100 transition-all duration-200 hover:shadow-xl;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all duration-200 bg-white;
+  }
+
+  .textarea {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all duration-200 bg-white min-h-[120px] resize-y;
+  }
+
+  .step-indicator {
+    @apply flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-200;
+  }
+
+  .step-active {
+    @apply bg-primary text-white;
+  }
+
+  .step-completed {
+    @apply bg-green-500 text-white;
+  }
+
+  .step-inactive {
+    @apply bg-gray-200 text-gray-500;
+  }
+
+  .highlight-item {
+    @apply flex items-center space-x-2 p-3 rounded-lg border border-gray-200 transition-all duration-200 cursor-pointer hover:border-primary-300 hover:bg-primary-50;
+  }
+
+  .highlight-selected {
+    @apply border-primary-500 bg-primary-50;
+  }
+}
+
+@layer utilities {
+
+  /* Tailwind doesn’t have text-wrap utilities, so we define it manually */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+
+
+
+/* Hide Google toolbar */
+
+
+/* Remove background and borders */
+.goog-te-gadget {
+  font-size: 0 !important;
+  /* hides default text */
+}
+
+.goog-te-gadget img {
+  display: none !important;
+}
+
+
+.goog-te-gadget-simple span a span {
+  border: none !important;
+}
+
+
+
+/* Optional: Add hover effect */
+#google_translate_element select:hover {
+  border-color: #555;
+}
+
+
+
+/* Hide the top Google translate toolbar */
+.skiptranslate iframe {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+
+
+.goog-te-gadget-simple {
+  background-color: #FFF;
+  border: 2px solid #D5D5D5 !important;
+
+  font-size: 10pt;
+  display: inline-block;
+  padding: 6px;
+
+  border-radius: 3px;
+
+  cursor: pointer;
+}
+
+
+.goog-te-gadget-simple::before {
+  content: "🌐";
+}
+
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3; /* light gray */
+  border-radius: 4px;
+}
+
+
+next-route-announcer + div {
+  display: none !important;
+}
+
+
+#goog-gt-tt{
+  display: none !important;
+}
