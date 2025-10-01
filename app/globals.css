@@ -114,8 +114,7 @@ body {
 
   font-size: 10pt;
   display: inline-block;
-  padding: 6px;
-
+ padding: 5px !important;
   border-radius: 3px;
 
   cursor: pointer;

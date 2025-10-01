@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import LogoutButton from "./components/logoutButton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,8 +28,12 @@ export default function RootLayout({ children }) {
         {/* Language Switcher Dropdown */}
         <div
           id="google_translate_element"
-          className="fixed top-7 right-4 z-50"
+          className="fixed top-5 right-24 z-50"
         ></div>
+
+
+        
+        
 
         {children}
 
