@@ -26,6 +26,8 @@ export default function WoningTovenaar() {
   const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [totalTokens, setTotalTokens] = useState(0);
+  const [inputTokens, setInputTokens] = useState(0);
+  const [outputTokens, setOutputTokens] = useState(0);
 
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -106,6 +108,8 @@ export default function WoningTovenaar() {
         },
       ]);
       setTotalTokens(0);
+      setInputTokens(0);
+      setOutputTokens(0);
       setUserInput("");
 
       localStorage.setItem("activeConversationId", data.sessionId);
@@ -135,7 +139,9 @@ export default function WoningTovenaar() {
       const data = await response.json();
 
       setCurrentConversationId(sessionId);
-      setTotalTokens(data.totalTokens || 0);
+      setTotalTokens(data.tokens?.total || 0);
+      setInputTokens(data.tokens?.input || 0);
+      setOutputTokens(data.tokens?.output || 0);
 
       const formattedMessages =
         data.messages?.map((msg) => ({
@@ -177,6 +183,7 @@ export default function WoningTovenaar() {
 
       const data = await response.json();
 
+      console.log(data, "datadatadata");
       if (response.ok) {
         setMessages((prev) => [
           ...prev,
@@ -187,7 +194,10 @@ export default function WoningTovenaar() {
             tokens: data.tokensUsed,
           },
         ]);
-        setTotalTokens(data.totalTokens || 0);
+        setTotalTokens(data.conversationTokens?.total || 0);
+        setInputTokens(data.conversationTokens?.input || 0);
+        setOutputTokens(data.conversationTokens?.output || 0);
+
         await loadConversations();
       } else {
         setMessages((prev) => [
@@ -227,14 +237,12 @@ export default function WoningTovenaar() {
   };
 
   const getConversationTitle = (conv) => {
-
-    console.log(conv,"convconv")
+    console.log(conv, "convconv");
     if (conv.title && conv.title.trim() !== "") {
       return conv.title;
     }
     return "New Chat";
   };
-  
 
   const renderMessage = (message, index) => {
     const isUser = message.role === "user";
@@ -253,8 +261,8 @@ export default function WoningTovenaar() {
               : "bg-white border border-gray-200 text-gray-900"
           }`}
         >
-          <ReactMarkdown className="prose prose-sm max-w-none">
-            {message.content}
+          <ReactMarkdown className="prose prose-sm max-w-none prose-ul:list-disc prose-ol:list-decimal">
+            {message.content.replace(/\\n/g, "\n")}
           </ReactMarkdown>
 
           <div
@@ -264,7 +272,10 @@ export default function WoningTovenaar() {
           >
             <span>{message.timestamp.toLocaleTimeString()}</span>
             {message.tokens && (
-              <span className="ml-2">{message.tokens.total} tokens</span>
+              <p className="text-xs text-gray-500 mt-1">
+                Tokens used — Total: {message.tokens.total} | Input:{" "}
+                {message.tokens.input} | Output: {message.tokens.output}
+              </p>
             )}
           </div>
 
@@ -399,7 +410,8 @@ export default function WoningTovenaar() {
                   </h2>
                   {totalTokens > 0 && (
                     <p className="text-xs text-gray-500 mt-1">
-                      Total tokens used: {totalTokens}
+                      Tokens used — Total: {totalTokens} | Input: {inputTokens}{" "}
+                      | Output: {outputTokens}
                     </p>
                   )}
                 </div>
@@ -430,26 +442,25 @@ export default function WoningTovenaar() {
             </div>
           ) : (
             <div className="flex items-center justify-center h-full">
-            <div className="flex flex-col items-center text-center space-y-4 ">
-              <WoningTovenaarLogo className="w-40" />
-              <div>
-                <h1 className="text-4xl font-bold text-[#1e40af] mb-4">
-                  Welcome to WoningTovenaar 🏠
-                </h1>
-                <p className="text-xl text-gray-600 max-w-md mx-auto">
-                  Create professional property listings with AI assistance
-                </p>
+              <div className="flex flex-col items-center text-center space-y-4 ">
+                <WoningTovenaarLogo className="w-40" />
+                <div>
+                  <h1 className="text-4xl font-bold text-[#1e40af] mb-4">
+                    Welcome to WoningTovenaar 🏠
+                  </h1>
+                  <p className="text-xl text-gray-600 max-w-md mx-auto">
+                    Create professional property listings with AI assistance
+                  </p>
+                </div>
+                <button
+                  onClick={startNewConversation}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-[#00a8a8] to-[#1e40af] hover:from-[#008a8a] hover:to-[#1e40af]/90 text-white font-medium py-4 px-8 rounded-lg text-lg disabled:opacity-50 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
+                  {loading ? "Starting..." : "Start New Chat"}
+                </button>
               </div>
-              <button
-                onClick={startNewConversation}
-                disabled={loading}
-                className="bg-gradient-to-r from-[#00a8a8] to-[#1e40af] hover:from-[#008a8a] hover:to-[#1e40af]/90 text-white font-medium py-4 px-8 rounded-lg text-lg disabled:opacity-50 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                {loading ? "Starting..." : "Start New Chat"}
-              </button>
             </div>
-          </div>
-          
           )}
         </div>
 
@@ -457,7 +468,7 @@ export default function WoningTovenaar() {
         {currentConversationId && (
           <div className="border-t border-gray-200 bg-white p-2">
             <div className=" mx-auto">
-              <div className="flex space-x-3">
+              <div className="flex items-center space-x-3">
                 <textarea
                   ref={textareaRef}
                   value={userInput}
@@ -476,7 +487,7 @@ export default function WoningTovenaar() {
                 <button
                   onClick={sendMessage}
                   disabled={loading || !userInput.trim()}
-                  className="bg-gradient-to-r from-[#00a8a8] to-[#1e40af] hover:from-[#008a8a] hover:to-[#1e40af]/90 text-white px-6 py-3 rounded-lg disabled:opacity-50 font-medium transition-all shadow-md flex items-center space-x-2"
+                  className="bg-gradient-to-r h-fit w-auto from-[#00a8a8] to-[#1e40af] hover:from-[#008a8a] hover:to-[#1e40af]/90 text-white px-6 py-3 rounded-lg disabled:opacity-50 font-medium transition-all shadow-md flex items-center space-x-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>Send</span>
@@ -486,8 +497,7 @@ export default function WoningTovenaar() {
           </div>
         )}
 
-
-        <Footer/>
+        <Footer />
       </main>
     </div>
   );
