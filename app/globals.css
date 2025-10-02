@@ -95,6 +95,10 @@
   border-color: #555;
 }
 
+.hide-scrollbar::-webkit-scrollbar{
+  display: none !important;
+}
+
 
 
 /* Hide the top Google translate toolbar */
