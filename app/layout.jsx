@@ -26,10 +26,10 @@ export default function RootLayout({ children }) {
         className={`${inter.className} antialiased bg-gray-50`}
       >
         {/* Language Switcher Dropdown */}
-        <div
+        {/* <div
           id="google_translate_element"
           className="fixed top-5 right-24 z-50"
-        ></div>
+        ></div> */}
 
 
         
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
         {children}
 
         {/* Google Translate Init Script */}
-        <Script id="google-translate-init" strategy="afterInteractive">
+        {/* <Script id="google-translate-init" strategy="afterInteractive">
           {`
             function googleTranslateElementInit() {
               new google.translate.TranslateElement(
@@ -60,11 +60,10 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* Google Translate Library */}
         <Script
           src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
           strategy="afterInteractive"
-        />
+        /> */}
       </body>
     </html>
   );
